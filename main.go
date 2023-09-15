@@ -66,7 +66,40 @@ func New(dir string, options *Options) (*Driver, error) {
 }
 
 // Write struct method of driver struct type
-func (d *Driver) Write() error {
+func (d *Driver) Write(collection, resouce string, v interface{}) error {
+	if collection == "" {
+		return fmt.Errorf("Missing collection !")
+	}
+
+	if resouce == "" {
+		return fmt.Errorf("Missing Resouce !!")
+	}
+
+	mutex := d.GetOrCreateMutex(collection)
+	mutex.Lock()
+
+	defer mutex.Unlock() // at the end after write function completed
+
+	dir := filepath.Join(d.dir, collection)
+	fnlPath := filepath.Join(dir, resouce+".josn")
+	tmpPath := fnlPath + ".tmp"
+
+	if err := os.Mkdir(dir, 0755); err != nil {
+		return err
+	}
+
+	// converting collected data in json
+	b, err := json.MarshalIndent(v, "", "\t")
+	if err != nil {
+		return err
+	}
+
+	b = append(b, byte('\n'))
+
+	// Writing to the created file
+	if err := os.WriteFile(tmpPath, b, 0644); err != nil {
+		return err
+	}
 
 }
 
@@ -88,7 +121,7 @@ func (d *Driver) GetOrCreateMutex() *sync.Mutex {
 
 func stat(path string) (fi os.FileInfo, err error) {
 	if fi, err = os.Stat(path); os.IsNotExist(err) {
-		fi, err = os.Stat(path + ".json")
+		fi, err = os.Stat(path + ".json") // created dabase will have .json file
 	}
 	return
 }
