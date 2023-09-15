@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 	"path/filepath"
 	"sync"
 
@@ -44,8 +45,24 @@ func New(dir string, options *Options) (*Driver, error) {
 	}
 
 	if opts.Logger == nil {
-		opts.Logger = lumber.NewConsoleLogger(lumber.INFO)
+		opts.Logger = lumber.NewConsoleLogger((lumber.INFO))
 	}
+
+	driver := Driver{
+		dir:     dir,
+		mutexes: make(map[string]*sync.Mutex),
+		log:     opts.Logger,
+	}
+
+	// if the databse ale=reasy exists
+	if _, err := os.Stat(dir); err != nil {
+		opts.Logger.Debug("Using '%s' (database already exists)\n", dir)
+		return &driver, nil
+	}
+
+	// If database not exits
+	opts.Logger.Debug("Creating the databse at '%s'... \n", dir)
+	return &driver, os.Mkdir(dir, 0755)
 }
 
 // Write struct method of driver struct type
@@ -67,6 +84,13 @@ func (d *Driver) Delete() error {
 
 func (d *Driver) GetOrCreateMutex() *sync.Mutex {
 
+}
+
+func stat(path string) (fi os.FileInfo, err error) {
+	if fi, err = os.Stat(path); os.IsNotExist(err) {
+		fi, err = os.Stat(path + ".json")
+	}
+	return
 }
 
 // Address
