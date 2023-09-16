@@ -101,6 +101,8 @@ func (d *Driver) Write(collection, resouce string, v interface{}) error {
 		return err
 	}
 
+	return os.Rename(tmpPath, fnlPath)
+
 }
 
 func (d *Driver) Read(collection, resource string, v interface{}) error {
