@@ -103,7 +103,28 @@ func (d *Driver) Write(collection, resouce string, v interface{}) error {
 
 }
 
-func (d *Driver) Read() error {
+func (d *Driver) Read(collection, resource string, v interface{}) error {
+
+	if collection == "" {
+		return fmt.Errorf("Missing collection !!")
+	}
+
+	if resource == "" {
+		return fmt.Errorf("Missing resouce, \n Unable to save !!")
+	}
+
+	record := filepath.Join(d.dir, collection, resource)
+
+	if _, err := stat(record); err != nil {
+		return err
+	}
+
+	b, err := os.ReadFile(record + ".json")
+	if err != nil {
+		return err
+	}
+
+	return json.Unmarshal(b, &v)
 
 }
 
