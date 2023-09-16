@@ -115,8 +115,16 @@ func (d *Driver) Delete() error {
 
 }
 
-func (d *Driver) GetOrCreateMutex() *sync.Mutex {
+func (d *Driver) GetOrCreateMutex(collection string) *sync.Mutex {
 
+	d.mutex.Lock()
+	defer d.mutex.Unlock()
+	m, present := d.mutexes[collection]
+
+	if !present {
+		m = &sync.Mutex{}
+		d.mutexes[collection] = m
+	}
 }
 
 func stat(path string) (fi os.FileInfo, err error) {
