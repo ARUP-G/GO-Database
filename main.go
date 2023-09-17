@@ -250,7 +250,7 @@ func main() {
 	}
 
 	// read all
-	records, err := db.readAll("users")
+	records, err := db.ReadAll("users")
 	if err != nil {
 		fmt.Println("Error", err)
 	}
