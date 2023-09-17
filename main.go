@@ -130,8 +130,34 @@ func (d *Driver) Read(collection, resource string, v interface{}) error {
 
 }
 
-func (d *Driver) ReadAll() error {
+func (d *Driver) ReadAll(collection string) ([]string, error) {
+	// []string -> data
+	if collection == "" {
+		return nil, fmt.Errorf("Missong collection !! \n Unable to read!!")
+	}
 
+	// Going to folder and joning the collection
+	dir := filepath.Join(d.dir, collection)
+
+	if _, err := stat(dir); err != nil {
+		return nil, err
+	}
+
+	// Read everything '_' -> err
+	files, _ := os.ReadDir(dir)
+
+	var recoads []string
+
+	// Accessing the files accorfing to names
+	for _, file := range files {
+		b, err := os.ReadFile(filepath.Join(dir, file.Name()))
+		if err != nil {
+			return nil, err
+		}
+
+		recoads = append(recoads, string(b))
+	}
+	return recoads, nil
 }
 
 func (d *Driver) Delete() error {
