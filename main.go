@@ -194,6 +194,7 @@ func (d *Driver) GetOrCreateMutex(collection string) *sync.Mutex {
 		m = &sync.Mutex{}
 		d.mutexes[collection] = m
 	}
+	return m
 }
 
 func stat(path string) (fi os.FileInfo, err error) {
