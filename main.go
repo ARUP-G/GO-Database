@@ -225,7 +225,7 @@ func main() {
 	// the collection folder will be created in this folder
 	dir := "./"
 
-	db, err := New()(dir, nil)
+	db, err := New(dir, nil)
 
 	if err != nil {
 		fmt.Println("Error", err)
