@@ -86,7 +86,7 @@ func (d *Driver) Write(collection, resouce string, v interface{}) error {
 	fnlPath := filepath.Join(dir, resouce+".josn")
 	tmpPath := fnlPath + ".tmp"
 
-	if err := os.Mkdir(dir, 0755); err != nil {
+	if err := os.MkdirAll(dir, 0755); err != nil {
 		return err
 	}
 
