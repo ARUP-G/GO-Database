@@ -108,11 +108,11 @@ func (d *Driver) Write(collection, resouce string, v interface{}) error {
 func (d *Driver) Read(collection, resource string, v interface{}) error {
 
 	if collection == "" {
-		return fmt.Errorf("Missing collection !!")
+		return fmt.Errorf("missing collection ")
 	}
 
 	if resource == "" {
-		return fmt.Errorf("Missing resouce, \n Unable to save !!")
+		return fmt.Errorf("missing resouce,  Unable to save ")
 	}
 
 	record := filepath.Join(d.dir, collection, resource)
@@ -133,7 +133,7 @@ func (d *Driver) Read(collection, resource string, v interface{}) error {
 func (d *Driver) ReadAll(collection string) ([]string, error) {
 	// []string -> data
 	if collection == "" {
-		return nil, fmt.Errorf("Missong collection !! \n Unable to read!!")
+		return nil, fmt.Errorf("missing collection !! Unable to read")
 	}
 
 	// Going to folder and joning the collection
@@ -171,7 +171,7 @@ func (d *Driver) Delete(collection, resource string) error {
 
 	switch fi, err := stat(dir); {
 	case fi == nil, err != nil:
-		return fmt.Errorf("Unable to find file or Directory %v \n", path)
+		return fmt.Errorf("unable to find file or directory %v", path)
 
 		// Delete whole folder
 	case fi.Mode().IsDir():
@@ -215,7 +215,7 @@ type Address struct {
 // User details
 type User struct {
 	Name    string
-	Age     json.Number // if will bw stringfor golang vut number for json
+	Age     json.Number // if will be string for golang but number for json
 	Contact string
 	Address Address
 }
@@ -226,13 +226,12 @@ func main() {
 	dir := "./"
 
 	db, err := New(dir, nil)
-
 	if err != nil {
 		fmt.Println("Error", err)
 	}
 
 	empolyees := []User{
-		{"Aron", "25", "12sefse", Address{"sef", "WB", "ind", "70998"}},
+		{"ron", "25", "12sefse", Address{"sef", "WB", "ind", "70998"}},
 		{"Jon", "25", "sddse", Address{"feO", "WB", "ind", "700071"}},
 		{"Vince", "31", "13fse", Address{"tyO", "WB", "ind", "733188"}},
 		{"Leo", "35", "445e", Address{"GrO", "WB", "ind", "73314"}},
@@ -272,15 +271,15 @@ func main() {
 	}
 	fmt.Println(alluser)
 
-	// Delete
+	// // Delete
 
-	if err := db.Delete("user", "Aron"); err != nil {
-		fmt.Println("Error", err)
-	}
+	// if err := db.Delete("user", "Aron"); err != nil {
+	// 	fmt.Println("Error", err)
+	// }
 
-	// Delete all
+	// // Delete all
 
-	if err := db.Delete("user", ""); err != nil {
-		fmt.Println("Error", err)
-	}
+	// if err := db.Delete("user", ""); err != nil {
+	// 	fmt.Println("Error", err)
+	// }
 }
