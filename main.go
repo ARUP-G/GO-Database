@@ -68,11 +68,11 @@ func New(dir string, options *Options) (*Driver, error) {
 // Write struct method of driver struct type
 func (d *Driver) Write(collection, resouce string, v interface{}) error {
 	if collection == "" {
-		return fmt.Errorf("Missing collection !")
+		return fmt.Errorf("missing collection ")
 	}
 
 	if resouce == "" {
-		return fmt.Errorf("Missing Resouce !!")
+		return fmt.Errorf("missing Resouce ")
 	}
 
 	mutex := d.GetOrCreateMutex(collection)
