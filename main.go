@@ -22,7 +22,6 @@ type (
 		Trace(string, ...interface{})
 	}
 
-	// con
 	Driver struct {
 		mutex   sync.Mutex
 		mutexes map[string]*sync.Mutex
@@ -54,13 +53,13 @@ func New(dir string, options *Options) (*Driver, error) {
 		log:     opts.Logger,
 	}
 
-	// if the databse ale=reasy exists
+	// if the database already exists
 	if _, err := os.Stat(dir); err != nil {
 		opts.Logger.Debug("Using '%s' (database already exists)\n", dir)
 		return &driver, nil
 	}
 
-	// If database not exits
+	// If database does not exist
 	opts.Logger.Debug("Creating the databse at '%s'... \n", dir)
 	return &driver, os.Mkdir(dir, 0755)
 }
@@ -72,7 +71,7 @@ func (d *Driver) Write(collection, resouce string, v interface{}) error {
 	}
 
 	if resouce == "" {
-		return fmt.Errorf("missing Resouce ")
+		return fmt.Errorf("missing resouce ")
 	}
 
 	mutex := d.GetOrCreateMutex(collection)
@@ -80,7 +79,10 @@ func (d *Driver) Write(collection, resouce string, v interface{}) error {
 
 	defer mutex.Unlock() // at the end after write function completed
 
+	// Creating a folder to store the collection
 	dir := filepath.Join(d.dir, collection)
+
+	// Creating json file with the name of the records
 	fnlPath := filepath.Join(dir, resouce+".josn")
 	tmpPath := fnlPath + ".tmp"
 
@@ -232,7 +234,7 @@ func main() {
 
 	empolyees := []User{
 		{"ron", "25", "12sefse", Address{"sef", "WB", "ind", "70998"}},
-		{"Jon", "25", "sddse", Address{"feO", "WB", "ind", "700071"}},
+		{"Jane", "25", "sddse", Address{"feO", "WB", "ind", "700071"}},
 		{"Vince", "31", "13fse", Address{"tyO", "WB", "ind", "733188"}},
 		{"Leo", "35", "445e", Address{"GrO", "WB", "ind", "73314"}},
 	}
